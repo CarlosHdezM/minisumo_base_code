@@ -1,5 +1,5 @@
-#ifndef ROBOT_LINE_SENSOR_H
-#define ROBOT_LINE_SENSOR_H
+#ifndef ROBOT_OPPONENT_SENSOR_H
+#define ROBOT_OPPONENT_SENSOR_H
 
 #include "Arduino.h"
 
