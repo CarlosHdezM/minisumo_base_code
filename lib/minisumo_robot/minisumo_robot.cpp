@@ -47,25 +47,49 @@ void MinisumoRobot::initialize(){
 }
 
 
-byte MinisumoRobot::read_sensors(){
-    byte sensor_readings = 0B00000000;
-    sensor_readings |=
-    sensor_line_left_.read()    << 2 |   
-    sensor_opp_l_.read()        << 7 |
-    sensor_opp_lm_.read()       << 6 |
-    sensor_opp_m_.read()        << 5 |
-    sensor_opp_rm_.read()       << 4 |
-    sensor_opp_r_.read()        << 3 |
-    sensor_line_right_.read()   << 1 |
-    start_module_.read()        << 0;
-    return sensor_readings;
+const SensorsStatus & MinisumoRobot::read_sensors(){
+    sensors_status_.opponent_sensors = 0B00000;
+    sensors_status_.line_sensors = 0B00;
+    //sensors_status_.start_module = 0; //"reseting" the start module variable is not needed  (no bitwise operations involved).
+    sensors_status_.line_sensors = sensor_line_left_.read() << 1;
+    sensors_status_.opponent_sensors |=
+    sensor_opp_l_.read()        << 4 |
+    sensor_opp_lm_.read()       << 3 |
+    sensor_opp_m_.read()        << 2 |
+    sensor_opp_rm_.read()       << 1 |
+    sensor_opp_r_.read()        << 0 ;
+    sensors_status_.line_sensors |= sensor_line_right_.read();
+    sensors_status_.start_module = start_module_.read();
+    return sensors_status_;
 }
 
 
-MotionEndReason MinisumoRobot::motion(
-        int16_t left_wheel_vel, int16_t right_wheel_vel, 
-        uint16_t max_time_ms, byte opp_sensors_mask, byte line_sensors_mask){
-            
-            
-            return MotionEndReason::LINE_DETECTED;
+MotionResult MinisumoRobot::motion(int16_t left_wheel_vel, int16_t right_wheel_vel, 
+    uint16_t max_time_ms, byte opp_sensors_mask, byte line_sensors_mask)
+    {
+        uint32_t _t_ini = millis();
+        MotionResult motion_result;
+        motion_result.sensors = this->read_sensors();
+        motion_result.end_reason = MotionEndReason::TIMEOUT;
+        //Set motors.
+        motor_left_.setVelocity(left_wheel_vel);
+        motor_right_.setVelocity(right_wheel_vel);
+        //Keep reading until time expires or a sensor reading cancels the action.
+        while(millis() - _t_ini < max_time_ms){
+            motion_result.sensors = this->read_sensors();
+            if (sensors_status_.start_module == 0){  //0 = Start module triggered "off" signal.
+                motion_result.end_reason = MotionEndReason::STOP_SIGNAL;
+                break;
+            }
+            if (sensors_status_.line_sensors & line_sensors_mask){  //Bitwise operation, checking individual bits.
+                motion_result.end_reason = MotionEndReason::LINE_DETECTED;
+                break;
+            }
+            if (sensors_status_.opponent_sensors & opp_sensors_mask){ //Bitwise operation, checking individual bits.
+                motion_result.end_reason = MotionEndReason::OPPONENT_DETECTED;
+                break;
+            }
         }
+
+        return motion_result;
+    }
