@@ -5,15 +5,16 @@
 #include "line_sensor.hpp"
 #include "motor_driver.hpp"
 #include "Arduino.h"
+#include "dip_switch.hpp"
 
 //The robot start module is a simple digital input, same as the opponent sensors. "Aliasing" the class. 
 typedef OpponentSensor StartModule;
 
 enum MotionEndReason : uint8_t {
-    TIMEOUT = 0x00,
+    TIMEOUT           = 0x00,
     OPPONENT_DETECTED = 0x01,
-    LINE_DETECTED = 0x02,
-    STOP_SIGNAL = 0x04,
+    LINE_DETECTED     = 0x02,
+    STOP_SIGNAL       = 0x04,
 };
 
 class MinisumoRobot{
@@ -29,12 +30,15 @@ class MinisumoRobot{
             uint8_t pin_opp_sensor_m,
             uint8_t pin_opp_sensor_rm,
             uint8_t pin_opp_sensor_r,
-            uint8_t pin_start_module
+            uint8_t pin_start_module,
+            DipSwitch<3> dip_switch,
+            uint8_t pin_buzzer
             );
         void initialize();
         MotionEndReason motion(
             int16_t left_wheel_vel, int16_t right_wheel_vel, 
             uint16_t max_time_ms, byte opp_sensors_mask, byte line_sensors_mask);
+        byte read_dip_sw(){return dip_switch_.read();}
 
         //Public data members
         byte opponent_sensors = 0b00000;
@@ -57,6 +61,8 @@ class MinisumoRobot{
         OpponentSensor sensor_opp_rm_;
         OpponentSensor sensor_opp_r_;
         StartModule start_module_;
+        DipSwitch<3> dip_switch_;
+        uint8_t pin_buzzer_;
 
         //Private member functions
         byte read_sensors();
