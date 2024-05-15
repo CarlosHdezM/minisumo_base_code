@@ -11,6 +11,7 @@
 //The robot start module is a simple digital input, same as the opponent sensors. "Aliasing" the class. 
 typedef OpponentSensor StartModule;
 
+#define DIP_SWITCH_BITS 3
 
 class MinisumoRobot{
     public:
@@ -26,7 +27,7 @@ class MinisumoRobot{
             uint8_t pin_opp_sensor_rm,
             uint8_t pin_opp_sensor_r,
             uint8_t pin_start_module,
-            DipSwitch<3> dip_switch,
+            DipSwitch<DIP_SWITCH_BITS> dip_switch,
             uint8_t pin_buzzer
             );
         void initialize();
@@ -38,9 +39,6 @@ class MinisumoRobot{
 
 
     private:
-        //Class defaults (constants) (shared by all instances of the class).
-        static constexpr uint8_t MAX_OPP_SENSORS_COUNT = 5;
-
         //Private data members
         MotorDriver motor_left_;
         MotorDriver motor_right_;
@@ -52,7 +50,7 @@ class MinisumoRobot{
         OpponentSensor sensor_opp_rm_;
         OpponentSensor sensor_opp_r_;
         StartModule start_module_;
-        DipSwitch<3> dip_switch_;
+        DipSwitch<DIP_SWITCH_BITS> dip_switch_;
         uint8_t pin_buzzer_;
         SensorsStatus sensors_status_;
 

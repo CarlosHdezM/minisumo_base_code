@@ -12,7 +12,7 @@ MinisumoRobot::MinisumoRobot(
     uint8_t pin_opp_sensor_rm,
     uint8_t pin_opp_sensor_r,
     uint8_t pin_start_module,
-    DipSwitch<3> dip_switch,
+    DipSwitch<DIP_SWITCH_BITS> dip_switch,
     uint8_t pin_buzzer
     ):
     motor_left_{pin_1_motor_left, pin_2_motor_left},
