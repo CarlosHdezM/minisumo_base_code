@@ -36,7 +36,6 @@ void setup()
 {
     //Test Setup
     Serial.begin(115200);
-
     robot.initialize();
 
     pinMode(robot_pins::SPARE_PIN, OUTPUT);
