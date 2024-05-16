@@ -29,7 +29,6 @@ namespace robot_pins
     constexpr uint8_t DIP_SW_BIT_0   = 7;
     constexpr uint8_t DIP_SW_BIT_1   = 8;
     constexpr uint8_t DIP_SW_BIT_2   = 9;
-    uint8_t DIP_SW[] = {DIP_SW_BIT_0, DIP_SW_BIT_1, DIP_SW_BIT_2};
     
     //Start and stop
     constexpr uint8_t START_MODULE   = 3;
