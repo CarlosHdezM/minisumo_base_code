@@ -26,4 +26,16 @@ class MotionResult{
         SensorsStatus sensors;
 };
 
+
+class MotionMessage{
+    public:
+        //MotionMessage();
+        int16_t left_wheel_vel_;
+        int16_t right_wheel_vel_;
+        uint16_t max_time_ms_;
+        byte opp_sensors_mask_;
+        byte line_sensors_mask_;
+};
+
+
 #endif

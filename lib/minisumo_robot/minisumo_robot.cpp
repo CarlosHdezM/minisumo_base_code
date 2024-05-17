@@ -64,6 +64,16 @@ const SensorsStatus & MinisumoRobot::read_sensors(){
 }
 
 
+ MotionResult MinisumoRobot::motion(const MotionMessage & motion_message){
+    return this->motion(
+        motion_message.left_wheel_vel_,
+        motion_message.right_wheel_vel_,
+        motion_message.max_time_ms_,
+        motion_message.opp_sensors_mask_,
+        motion_message.line_sensors_mask_
+        );
+ }
+
 MotionResult MinisumoRobot::motion(int16_t left_wheel_vel, int16_t right_wheel_vel, 
     uint16_t max_time_ms, byte opp_sensors_mask, byte line_sensors_mask)
     {

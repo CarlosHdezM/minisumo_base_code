@@ -31,6 +31,7 @@ class MinisumoRobot{
             uint8_t pin_buzzer
             );
         void initialize();
+        MotionResult motion(const MotionMessage & motion_message);
         MotionResult motion(
             int16_t left_wheel_vel, int16_t right_wheel_vel, 
             uint16_t max_time_ms, byte opp_sensors_mask, byte line_sensors_mask);
