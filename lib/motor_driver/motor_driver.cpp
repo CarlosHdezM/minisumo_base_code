@@ -11,7 +11,7 @@ void MotorDriver::initialize()
 }
 
 
-void MotorDriver::setVelocity(int16_t velocity) //From -255 to 255 (8 bit resolution PWM)
+void MotorDriver::setVelocity(int16_t velocity) const //From -255 to 255 (8 bit resolution PWM)
 {
     if(velocity > 0){
         digitalWrite(this->pin_1_, HIGH);
