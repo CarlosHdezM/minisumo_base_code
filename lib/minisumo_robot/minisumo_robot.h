@@ -34,7 +34,12 @@ class MinisumoRobot{
         MotionResult motion(
             int16_t left_wheel_vel, int16_t right_wheel_vel, 
             uint16_t max_time_ms, byte opp_sensors_mask, byte line_sensors_mask);
+        inline void setMotors(int16_t left_wheel_vel, int16_t right_wheel_vel) const{
+                motor_left_.setVelocity(left_wheel_vel); 
+                motor_right_.setVelocity(right_wheel_vel);
+        }
         const SensorsStatus & read_sensors();
+        inline const SensorsStatus & get_last_sensor_readings() const{return sensors_status_;}
         byte read_dip_sw(){return dip_switch_.read();}
 
 
