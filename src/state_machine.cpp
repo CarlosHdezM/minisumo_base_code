@@ -77,26 +77,15 @@ namespace RobotSM{
 
     State search_0(MinisumoRobot& robot){
         RobotSM::State next_state = RobotSM::State::SEARCHING; //Default next transition -> Itself.
-        #define SEARCH_STEPS_COUNT 2
-        uint8_t curr_search_step = 0;
-        while(1){
+        MotionMessage motions[]{
+            {255, 255, 100, 0b11111, 0b11}, 
+            {0, 0, 2000, 0b11111, 0b11}
+        };
+        size_t motions_count = sizeof(motions) / sizeof(*motions);
+        for(uint8_t curr_search_step = 0; true ;curr_search_step = (curr_search_step + 1) % motions_count){ //Infinite void loop (induced rollover)
             //Serial.print("Search 0! \t");
-            MotionResult motion_result;
-            switch (curr_search_step)
-            {
-                case 0:
-                    motion_result = robot.motion(255,255,100,0b11111, 0b11);
-                    break;
-
-                case 1:
-                    motion_result = robot.motion(0,0,2000,0b11111, 0b11);
-                    break;
-                
-                default:
-                    Serial.println("ERROR, STEP OUT OF RANGE");
-                    break;
-            }
-            curr_search_step = (curr_search_step + 1) % SEARCH_STEPS_COUNT; //Increment with induced rollover.
+            MotionResult motion_result = robot.motion(motions[curr_search_step]);
+            
             //Transition conditions
             if (motion_result.end_reason == MotionEndReason::STOP_SIGNAL){
                 next_state = RobotSM::State::STOPPED;
@@ -117,7 +106,6 @@ namespace RobotSM{
     //Search 1: Searching moving straight at full speed and bouncing on the line.
     State search_1(MinisumoRobot& robot){
         RobotSM::State next_state = RobotSM::State::SEARCHING; //Default next transition -> Itself.
-
         while(1){
             //Serial.print("Search 1! \t");
             MotionResult motion_result = robot.motion(255,255,150,0b11111, 0b11);
