@@ -86,7 +86,7 @@ namespace RobotSM{
 
     State search_0(MinisumoRobot& robot){
         RobotSM::State next_state = RobotSM::State::SEARCHING; //Default next transition -> Itself.
-        MotionMessage motions[]{
+        constexpr MotionMessage motions[]{
             {255, 255, 100, 0b11111, 0b11}, 
             {0, 0, 2000, 0b11111, 0b11}
         };
@@ -139,7 +139,7 @@ namespace RobotSM{
 
     State search_2(MinisumoRobot& robot){
         RobotSM::State next_state = RobotSM::State::SEARCHING; //Default next transition -> Itself.
-        MotionMessage motions[]{
+        constexpr MotionMessage motions[]{
             {255, 255, 100, 0b11111, 0b11}, 
             {0, 0, 100, 0b11111, 0b11},
             {255, 255, 100, 0b11111, 0b11},
@@ -179,35 +179,28 @@ namespace RobotSM{
 
 
     State search_3(MinisumoRobot& robot){
-        RobotSM::State next_state = RobotSM::State::SEARCHING; //Default next transition -> Itself.
-        while(1){
-            Serial.print("Search 3! \t");
-        }
-        return next_state;
+        // TODO: Implement an actual search method. 
+        // For now, we redirect this search method to search_0.
+        return search_0(robot);
     }
 
 
     State pre_attack(MinisumoRobot& robot){
-        return RobotSM::State::ATTACKING;  //!! Remove this line. Bypass pre_attack for now for debugging purposes. 
         return pre_attack_functions[pre_attack_fct_idx](robot);
     }
 
 
     State pre_attack_0(MinisumoRobot& robot){
-        RobotSM::State next_state = RobotSM::State::PRE_ATTACKING; //Default next transition -> Itself.
-        while(1){
-            Serial.print("PRE ATTACK 0! \t");
-        }
-        return next_state;
+        // TODO: Implement an actual pre-attack method. 
+        // For now, we transition directly to attack.
+        return RobotSM::State::ATTACKING;
     }
 
 
     State pre_attack_1(MinisumoRobot& robot){
-        RobotSM::State next_state = RobotSM::State::PRE_ATTACKING; //Default next transition -> Itself.
-        while(1){
-            Serial.print("PRE ATTACK 1! \t");
-        }
-        return next_state;
+        // TODO: Implement an actual pre-attack method. 
+        // For now, we transition directly to attack.
+        return RobotSM::State::ATTACKING;
     }
 
 
