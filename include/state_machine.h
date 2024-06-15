@@ -6,7 +6,7 @@
 
 namespace RobotSM{
 
-    enum /*class*/ State : uint8_t{
+    enum class State : uint8_t{
         STOPPED, 
         RETREAT,
         SEARCHING,
