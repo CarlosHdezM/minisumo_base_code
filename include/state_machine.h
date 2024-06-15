@@ -6,14 +6,16 @@
 
 namespace RobotSM{
 
-    enum class State : uint8_t{
+    enum /*class*/ State : uint8_t{
         STOPPED, 
         RETREAT,
         SEARCHING,
         PRE_ATTACKING,
         ATTACKING,
+        STATES_COUNT
     };
 
+    State run_transition(State state, MinisumoRobot& robot);
     State stopped(MinisumoRobot& robot);
     State retreat(MinisumoRobot& robot);
     State searching(MinisumoRobot& robot);

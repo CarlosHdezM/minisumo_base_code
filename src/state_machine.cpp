@@ -7,10 +7,18 @@
 
 namespace RobotSM{
 
+    function_choice state_machine_functions[State::STATES_COUNT] = {stopped, retreat, searching, pre_attack, attack};
     function_choice search_functions[SEARCH_FCTS_COUNT] = {search_0, search_1, search_2, search_3};
-    uint8_t search_fct_idx = 0;
     function_choice pre_attack_functions[PRE_ATTACK_FCTS_COUNT] = {pre_attack_0, pre_attack_1};
+    uint8_t search_fct_idx = 0;
     uint8_t pre_attack_fct_idx = 0;
+
+
+    State run_transition(State next_state, MinisumoRobot& robot){
+        return state_machine_functions[next_state](robot);
+    }
+
+
 
     /*
     *Select searching method from dip switch.

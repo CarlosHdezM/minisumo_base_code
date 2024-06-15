@@ -29,15 +29,13 @@ MinisumoRobot robot{
 RobotSM::State current_state{RobotSM::State::STOPPED};
 
 
-//Globals - Global variables
-
-
 void setup()
 {
     //Test Setup
     Serial.begin(115200);
     robot.initialize();
 
+    //Spare pin is used for debugging purposes (logic analyzer connected to this pin)
     pinMode(robot_pins::SPARE_PIN, OUTPUT);
     digitalWrite(robot_pins::SPARE_PIN, LOW);
 }
@@ -46,51 +44,10 @@ void setup()
 
 void loop()
 {
-    
-    switch (current_state)
-    {
-        case RobotSM::State::STOPPED:
-            current_state = RobotSM::stopped(robot);
-            break;
+    current_state = RobotSM::run_transition(current_state, robot);
 
-        case RobotSM::State::RETREAT:
-            current_state = RobotSM::retreat(robot);
-            break;
-
-        case RobotSM::State::SEARCHING:
-            current_state = RobotSM::searching(robot);
-            break;
-
-        case RobotSM::State::PRE_ATTACKING:
-            current_state = RobotSM::pre_attack(robot);
-            break;
-
-        case RobotSM::State::ATTACKING:
-            current_state = RobotSM::attack(robot);
-            break;
-
-
-        default:
-            Serial.print("ERROR: WE SHOULDN'T REACH THIS CASE.");
-            break;
-    }
-
-
+    // Debug init
     digitalWrite(robot_pins::SPARE_PIN, !digitalRead(robot_pins::SPARE_PIN));
-    Serial.println("HEY");
-    //volatile int val = robot.();
-    //robot.motion(255,255,100,0b0,0b0);
-    //Serial.println(val, BIN);
-    //volatile uint8_t val2 = robot.read_dip_sw();
-    //auto response{robot.read_sensors()};
-    //volatile auto result = robot.motion(255,255,0,0b0,0b0);
-    //volatile auto result = robot.read_sensors();
-    //response.line_sensors = 3;
-    //Serial.print(response.line_sensors);
-    //Serial.print("\t");
-    //Serial.print(response.opponent_sensors);
-    //Serial.print("\t");
-    //Serial.print(response.start_module);
-    //Serial.println(val2);
-   // Serial.println();
+    Serial.println("DEBUG: Back to loop");
+    // Debug end
 }
