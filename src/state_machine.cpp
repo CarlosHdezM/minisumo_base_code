@@ -130,8 +130,40 @@ namespace RobotSM{
 
     State search_2(MinisumoRobot& robot){
         RobotSM::State next_state = RobotSM::State::SEARCHING; //Default next transition -> Itself.
-        while(1){
-            Serial.print("Search 2! \t");
+        MotionMessage motions[]{
+            {255, 255, 100, 0b11111, 0b11}, 
+            {0, 0, 100, 0b11111, 0b11},
+            {255, 255, 100, 0b11111, 0b11},
+            {0, 0, 100, 0b11111, 0b11},
+            {255, 255, 100, 0b11111, 0b11},
+            {0, 0, 100, 0b11111, 0b11},
+            {255, -255, 70, 0b11111, 0b11},
+            {0, 0, 100, 0b11111, 0b11},
+            {-255, -255, 100, 0b11111, 0b11}, 
+            {0, 0, 100, 0b11111, 0b11},
+            {-255, -255, 100, 0b11111, 0b11}, 
+            {0, 0, 100, 0b11111, 0b11},
+            {-255, -255, 100, 0b11111, 0b11}, 
+            {0, 0, 2000, 0b11111, 0b11},
+        };
+        size_t motions_count = sizeof(motions) / sizeof(*motions);
+        for(uint8_t curr_search_step = 0; true ;curr_search_step = (curr_search_step + 1) % motions_count){ //Infinite void loop (induced rollover)
+            //Serial.print("Search 2! \t");
+            MotionResult motion_result = robot.motion(motions[curr_search_step]);
+            
+            //Transition conditions
+            if (motion_result.end_reason == MotionEndReason::STOP_SIGNAL){
+                next_state = RobotSM::State::STOPPED;
+                break;
+            }
+            if (motion_result.end_reason == MotionEndReason::LINE_DETECTED){
+                next_state = RobotSM::State::RETREAT;
+                break;
+            }
+            if (motion_result.end_reason == MotionEndReason::OPPONENT_DETECTED){
+                next_state = RobotSM::State::PRE_ATTACKING;
+                break;
+            }
         }
         return next_state;
     }
